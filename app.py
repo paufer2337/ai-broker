@@ -35,9 +35,22 @@ def broker_post():
     form = BrokerForm()
     
     if (form.validate_on_submit()):
-        print('Saving to database...')
-        return 'Saving to database...'
+        from model.broker import Broker
 
+
+        broker = Broker(
+            name = form.data['name'],
+            email = form.data['email'],
+            webpage = form.data['webpage']
+        )
+
+        # import pdb; pdb.set_trace()
+
+        db.session.add(broker)
+        db.session.commit()
+
+        print('Saving to database...', broker.id)
+        return 'Saving to database...'
     else: 
         return render_template('brokers/index.html', form=form)
 
