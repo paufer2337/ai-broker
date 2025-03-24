@@ -3,9 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>AI Broker Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
-<body>
-    Index
+<body class="dark-theme">
+    <nav class="main-nav">
+        <div class="container">
+            <div class="logo">AI Broker</div>
+            <ul class="nav-links">
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('brokers.broker_index') }}">Brokers</a></li>
+                <li><a href="#">Services</a></li>
+                <li><a href="#">About</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="container">
+            <h1>RISK<br>SECURITY<br>COMPLIANCE</h1>
+            <p class="subtitle">AI-Powered Broker Matching Platform</p>
+        </div>
+    </header>
+
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="contact-info">
+                    <h3>Contact</h3>
+                    <p>Email: contact@aibroker.com</p>
+                    <p>Address: Your Address Here</p>
+                </div>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>

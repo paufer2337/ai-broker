@@ -1,12 +1,32 @@
-{% extends "bootstrap/base.html" %}
+{% extends "index.html" %}
 {% import "bootstrap/wtf.html" as wtf %}    
 
-
 {% block content %}
-    Brokers Index
+    <div class="section">
+        <h2>Broker Directory</h2>
+        
+        <div class="form-section">
+            {{ wtf.quick_form(form, button_map={'submit': 'primary'}) }}
+        </div>
 
-    <div>
-        {{ wtf.quick_form(form) }}
+        <div class="brokers-grid">
+            {% for broker in brokers %}
+                <div class="card">
+                    <h3 class="card-title">{{ broker.name }}</h3>
+                    {% if broker.email %}
+                        <p class="card-text">
+                            <i class="fas fa-envelope"></i> 
+                            <a href="mailto:{{ broker.email }}">{{ broker.email }}</a>
+                        </p>
+                    {% endif %}
+                    {% if broker.webpage %}
+                        <p class="card-text">
+                            <i class="fas fa-globe"></i> 
+                            <a href="{{ broker.webpage }}" target="_blank">Visit Website</a>
+                        </p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
     </div>
-
 {% endblock %}
