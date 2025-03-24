@@ -1,9 +1,5 @@
-from flask import Flask, request
-from flask_sqlalchemy import SQLAlchemy
-from flask import render_template
-from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
-from wtforms.validators import DataRequired, Length, Email
+from extensions import db
+from flask import Flask, render_template
 from flask_bootstrap import Bootstrap
 
 app = Flask(__name__)
@@ -11,48 +7,16 @@ app.config['SECRET_KEY'] = 'Hemlig Nyckel'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.sqlite3'
 
 bootstrap = Bootstrap(app)
-db = SQLAlchemy(app)
+db.init_app(app)
 
-
-class BrokerForm(FlaskForm):
-    name = StringField('Broker name: ', validators=[DataRequired(), Length(min=5, max=50, message="Too short/long")])
-    email = StringField('Contact email: ', validators=[Email()])
-    webpage = StringField('Webpage: ')
-    submit = SubmitField('Submit')
+# register the blueprints in app
+from blueprints.brokers import brokers_bp
+app.register_blueprint(brokers_bp)
 
 
 @app.route('/')
 def index():
     return render_template('index.html')
-
-@app.route('/broker')
-def broker_index():
-    form = BrokerForm()
-    return render_template('brokers/index.html', form=form)
-
-@app.route('/broker', methods=['POST'])
-def broker_post():
-    form = BrokerForm()
-    
-    if (form.validate_on_submit()):
-        from model.broker import Broker
-
-
-        broker = Broker(
-            name = form.data['name'],
-            email = form.data['email'],
-            webpage = form.data['webpage']
-        )
-
-        # import pdb; pdb.set_trace()
-
-        db.session.add(broker)
-        db.session.commit()
-
-        print('Saving to database...', broker.id)
-        return 'Saving to database...'
-    else: 
-        return render_template('brokers/index.html', form=form)
 
 
 if __name__ == '__main__':
