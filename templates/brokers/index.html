@@ -1,30 +1,37 @@
 {% extends "index.html" %}
-{% import "bootstrap/wtf.html" as wtf %}    
+{% import "bootstrap/wtf.html" as wtf %}
 
 {% block content %}
-    <div class="section">
-        <h2>Broker Directory</h2>
+    <div class="section brokers-section">
+        <h2 class="section-title">Broker Directory</h2>
         
         <div class="form-section">
-            {{ wtf.quick_form(form, button_map={'submit': 'primary'}) }}
+            <div class="form-container">
+                <h3 class="form-title">Add New Broker</h3>
+                {{ wtf.quick_form(form, button_map={'submit': 'primary'}) }}
+            </div>
         </div>
 
         <div class="brokers-grid">
             {% for broker in brokers %}
-                <div class="card">
-                    <h3 class="card-title">{{ broker.name }}</h3>
-                    {% if broker.email %}
-                        <p class="card-text">
-                            <i class="fas fa-envelope"></i> 
-                            <a href="mailto:{{ broker.email }}">{{ broker.email }}</a>
-                        </p>
-                    {% endif %}
-                    {% if broker.webpage %}
-                        <p class="card-text">
-                            <i class="fas fa-globe"></i> 
-                            <a href="{{ broker.webpage }}" target="_blank">Visit Website</a>
-                        </p>
-                    {% endif %}
+                <div class="broker-card">
+                    <div class="card-content">
+                        <h3 class="card-title">{{ broker.name }}</h3>
+                        <div class="card-details">
+                            {% if broker.email %}
+                                <p class="card-text">
+                                    <i class="fas fa-envelope"></i> 
+                                    <a href="mailto:{{ broker.email }}" class="card-link">{{ broker.email }}</a>
+                                </p>
+                            {% endif %}
+                            {% if broker.webpage %}
+                                <p class="card-text">
+                                    <i class="fas fa-globe"></i> 
+                                    <a href="{{ broker.webpage }}" target="_blank" class="card-link">Visit Website</a>
+                                </p>
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
             {% endfor %}
         </div>
