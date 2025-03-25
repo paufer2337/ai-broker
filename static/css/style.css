@@ -225,7 +225,7 @@ footer {
 }
 
 .broker-card {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.08);
     border-radius: 12px;
     overflow: hidden;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -269,6 +269,7 @@ footer {
 .card-link:hover {
     color: var(--accent);
 }
+
 /* Form styling improvements */
 .form-control {
     background: rgba(255, 255, 255, 0.07);
@@ -325,4 +326,75 @@ footer {
 form .form-group:last-child {
     margin-top: 2rem;
     text-align: center;
+}
+
+.card-description {
+    font-size: 0.9rem;
+    color: var(--text-gray);
+    margin-bottom: 1rem;
+    line-height: 1.4;
+}
+
+.card-text i {
+    color: var(--accent);
+    width: 20px;
+    text-align: center;
+}
+
+.card-text span {
+    color: var(--text-light);
+    opacity: 0.8;
+}
+
+/* Mission specific styles */
+.missions-section {
+    padding: 60px 0;
+}
+
+.missions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 30px;
+    padding: 20px 0;
+}
+
+.mission-card {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.mission-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.mission-card .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px;
+}
+
+.mission-card .posted-date {
+    font-size: 0.9rem;
+    opacity: 0.7;
+}
+
+.mission-card .card-description {
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.mission-card .card-text {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.mission-card .card-text i {
+    opacity: 0.7;
+    width: 20px;
 }

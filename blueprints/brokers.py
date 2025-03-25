@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, redirect, url_for
 from forms.brokers import BrokerForm
 
 
@@ -11,7 +11,6 @@ def broker_index():
     from app import db
 
     brokers = db.session.query(Broker).all()
-
     form = BrokerForm()
     return render_template('brokers/index.html', form=form, brokers=brokers)
 
@@ -23,17 +22,18 @@ def broker_post():
         from model.broker import Broker
         from app import db
 
-
         broker = Broker(
-            name = form.data['name'],
-            email = form.data['email'],
-            webpage = form.data['webpage']
+            name=form.data['name'],
+            email=form.data['email'],
+            webpage=form.data['webpage'],
+            description=form.data['description'],
+            location=form.data['location'],
+            focus_areas=form.data['focus_areas']
         )
 
         db.session.add(broker)
         db.session.commit()
 
-        print('Saving to database...', broker.id)
-        return 'Saving to database...'
+        return redirect(url_for('brokers.broker_index'))
     else: 
         return render_template('brokers/index.html', form=form)

@@ -20,6 +20,21 @@
                     <div class="card-content">
                         <h3 class="card-title">{{ broker.name }}</h3>
                         <div class="card-details">
+                            {% if broker.description %}
+                                <p class="card-description">{{ broker.description }}</p>
+                            {% endif %}
+                            {% if broker.location %}
+                                <p class="card-text">
+                                    <i class="fas fa-map-marker-alt"></i> 
+                                    <span>{{ broker.location }}</span>
+                                </p>
+                            {% endif %}
+                            {% if broker.focus_areas %}
+                                <p class="card-text">
+                                    <i class="fas fa-tags"></i> 
+                                    <span>{{ broker.focus_areas }}</span>
+                                </p>
+                            {% endif %}
                             {% if broker.email %}
                                 <p class="card-text">
                                     <i class="fas fa-envelope"></i> 
@@ -29,7 +44,7 @@
                             {% if broker.webpage %}
                                 <p class="card-text">
                                     <i class="fas fa-globe"></i> 
-                                    <a href="{{ broker.webpage }}" target="_blank" class="card-link">Visit Website</a>
+                                    <a href="{{ broker.webpage }}" target="_blank" class="card-link">View Missions</a>
                                 </p>
                             {% endif %}
                         </div>
