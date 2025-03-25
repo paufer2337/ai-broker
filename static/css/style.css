@@ -14,28 +14,27 @@ body {
     color: var(--text-light);
     line-height: 1.6;
     overflow-x: hidden;
-    position: relative;
-    min-height: 100vh;
 }
 
 /* Background Q styles */
 .background-q {
     position: fixed;
     top: 0;
-    right: 0;
-    width: 100%;
+    left: 0;
+    width: 100vw;
     height: 100vh;
-    z-index: -999;
+    z-index: 1;
     pointer-events: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .background-q img {
-    position: absolute;
-    top: 50%;
-    right: 0;
-    transform: translateY(-50%);
-    max-height: 90vh;
+    width: 80vw;
+    height: 80vh;
     opacity: 1;
+    object-fit: contain;
 }
 
 /* Navigation styles */
@@ -59,8 +58,6 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    position: relative;
-    background: rgba(0, 0, 0, 0.4);
 }
 
 /* Logo styles */
@@ -88,7 +85,7 @@ body {
 
 .nav-links {
     display: flex;
-    gap: 2rem;
+    gap: 3rem;
     list-style: none;
     margin: 0;
     padding: 0;
@@ -97,22 +94,37 @@ body {
 .nav-links a {
     color: var(--text-light);
     text-decoration: none;
-    font-size: 0.9rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    padding: 5px 0;
+    opacity: 0.7;
+    transition: all 0.3s ease;
+}
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: var(--text-light);
+    transform: scaleX(0);
+    opacity: 0;
     transition: all 0.3s ease;
 }
 
 .nav-links a:hover {
-    background: rgba(255, 255, 255, 0.1);
-    transform: translateY(-2px);
+    opacity: 1;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
-.nav-links i {
-    color: var(--accent);
+.nav-links a:hover::after {
+    transform: scaleX(1);
+    opacity: 0.7;
 }
 
 /* Hero section */
@@ -156,12 +168,8 @@ body {
 
 /* Footer */
 footer {
-    position: relative;
-    z-index: 1;
-    background-color: var(--background);
     padding: 4rem 0;
     border-top: 1px solid rgba(255,255,255,0.1);
-    width: 100%;
 }
 
 .footer-logo-image {
@@ -338,54 +346,36 @@ form .form-group:last-child {
     opacity: 0.8;
 }
 
-.missions-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 25px;
-    padding: 20px 0;
-}
-
-.mission-card {
-    background: rgba(255, 255, 255, 0.15);
-    border-radius: 12px;
-    overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.mission-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-}
-
-.mission-card .card-content {
-    padding: 20px;
-}
-
-.card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 15px;
-}
-
-.posted-date {
-    font-size: 0.9rem;
-    opacity: 0.7;
-}
-
-.card-description {
-    margin-bottom: 15px;
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
     line-height: 1.5;
+    border-radius: 0.2rem;
 }
 
-.card-text {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 8px;
+.mission-card .btn-primary {
+    margin-top: 10px;
+    width: auto;  /* Override any full-width styling */
+    display: inline-block;
 }
 
-.card-text i {
-    opacity: 0.7;
-    width: 20px;
+.button-container {
+    text-align: left;
+    margin-top: 10px;
+}
+
+.view-missions-btn {
+    display: inline-block;
+    padding: 6px 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    color: #fff;
+    font-size: 12px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.view-missions-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
 }
