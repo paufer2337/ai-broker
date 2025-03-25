@@ -9,10 +9,14 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.sqlite3'
 bootstrap = Bootstrap(app)
 db.init_app(app)
 
-# register the blueprints in app
+# register the blueprints
 from blueprints.brokers import brokers_bp
-app.register_blueprint(brokers_bp)
+from blueprints.candidate import candidates_bp
+from blueprints.matching import matching_bp
 
+app.register_blueprint(brokers_bp, url_prefix='/brokers')
+app.register_blueprint(candidates_bp, url_prefix='/candidates')
+app.register_blueprint(matching_bp, url_prefix='/matches')
 
 @app.route('/')
 def index():
