@@ -6,27 +6,29 @@
         <h2 class="section-title">Latest Missions</h2>
         
         <div class="missions-grid">
-            {% for mission in missions %}
+            {% for broker in brokers %}
                 <div class="mission-card">
                     <div class="card-content">
                         <div class="card-header">
-                            <h3 class="card-title">{{ mission.title }}</h3>
-                            <span class="posted-date">{{ mission.posted_date.strftime('%Y-%m-%d') }}</span>
+                            <h3 class="card-title">{{ broker.name }}</h3>
                         </div>
                         <div class="card-details">
-                            <p class="card-description">{{ mission.description }}</p>
-                            <p class="card-text">
-                                <i class="fas fa-building"></i>
-                                <span>{{ mission.broker.name }}</span>
-                            </p>
+                            <p class="card-description">{{ broker.description }}</p>
                             <p class="card-text">
                                 <i class="fas fa-map-marker-alt"></i>
-                                <span>{{ mission.location }}</span>
+                                <span>{{ broker.location }}</span>
                             </p>
                             <p class="card-text">
                                 <i class="fas fa-tags"></i>
-                                <span>{{ mission.required_skills }}</span>
+                                <span>{{ broker.focus_areas }}</span>
                             </p>
+                            {% if broker.webpage %}
+                                <div class="button-container">
+                                    <a href="{{ broker.webpage }}" target="_blank" class="view-missions-btn">
+                                        <i class="fas fa-external-link-alt"></i> VIEW LIVE MISSIONS
+                                    </a>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
