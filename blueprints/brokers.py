@@ -1,5 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for
 from forms.brokers import BrokerForm
+from model.broker import Broker
+from extensions import db
 
 
 brokers_bp = Blueprint('brokers', __name__, url_prefix = '/brokers')
@@ -7,10 +9,7 @@ brokers_bp = Blueprint('brokers', __name__, url_prefix = '/brokers')
 
 @brokers_bp.route('/')
 def broker_index():
-    from model.broker import Broker
-    from app import db
-
-    brokers = db.session.query(Broker).all()
+    brokers = Broker.query.all()
     form = BrokerForm()
     return render_template('brokers/index.html', form=form, brokers=brokers)
 
@@ -19,9 +18,6 @@ def broker_post():
     form = BrokerForm()
     
     if (form.validate_on_submit()):
-        from model.broker import Broker
-        from app import db
-
         broker = Broker(
             name=form.data['name'],
             email=form.data['email'],
