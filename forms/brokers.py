@@ -6,4 +6,7 @@ class BrokerForm(FlaskForm):
     name = StringField('Broker name: ', validators=[DataRequired(), Length(min=5, max=50, message="Too short/long")])
     email = StringField('Contact email: ', validators=[Email()])
     webpage = StringField('Webpage: ')
+    description = StringField('Description: ')
+    location = StringField('Location: ')
+    focus_areas = StringField('Focus Areas: ')
     submit = SubmitField('Submit')
