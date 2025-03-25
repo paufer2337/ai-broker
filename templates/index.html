@@ -29,14 +29,19 @@
         </div>
     </nav>
 
+    {% block hero %}
     <header class="hero">
         <div class="container">
             <div class="hero-content">
                 <h1>MATCH<br>SECURE<br>DELIVER</h1>
                 <p class="subtitle">Internal talent matching platform for Secure by Q, powered by intelligent matching algorithms.</p>
+                <div class="hero-footer">
+                    <img src="{{ url_for('static', filename='images/small_logo.png') }}" alt="Secure by Q" class="logo-image">
+                </div>
             </div>
         </div>
     </header>
+    {% endblock %}
 
     <main class="main-content">
         <div class="container">
@@ -44,10 +49,16 @@
         </div>
     </main>
 
-    <footer class="site-footer">
+    <footer class="footer">
         <div class="container">
-            <img src="{{ url_for('static', filename='images/small_logo.png') }}" alt="Secure by Q" class="footer-logo">
-            <p class="copyright">© 2024 Secure by Q. All rights reserved.</p>
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="{{ url_for('static', filename='images/small_logo.png') }}" alt="Secure by Q" class="footer-logo-image">
+                </div>
+                <div class="copyright">
+                    © 2025 Secure by Q. All rights reserved.
+                </div>
+            </div>
         </div>
     </footer>
 </body>
