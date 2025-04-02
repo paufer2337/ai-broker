@@ -1,12 +1,21 @@
 from extensions import db
 from flask import Flask, render_template
 from flask_bootstrap import Bootstrap
+from flask_wtf.csrf import CSRFProtect
+import os
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'Hemlig Nyckel'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.sqlite3'
 
+# Configure upload folder
+UPLOAD_FOLDER = os.path.join(app.root_path, 'uploads', 'resumes')
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
 bootstrap = Bootstrap(app)
+csrf = CSRFProtect(app)
 db.init_app(app)
 
 # register the blueprints

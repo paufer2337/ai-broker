@@ -4,7 +4,60 @@
 {% block hero %}{% endblock %}
 
 {% block content %}
-    <div class="section candidates-section">
-        <h2 class="section-title">Candidate Directory</h2>
+<div class="section candidates-section">
+    <h2 class="section-title">Candidates</h2>
+    
+    <!-- Only one form at the top -->
+    <div class="form-section">
+        <div class="form-container">
+            <h3 class="form-title">Add New Candidate</h3>
+            <form method="POST" enctype="multipart/form-data">
+                {{ wtf.quick_form(form, button_map={'submit': 'primary'}) }}
+            </form>
+        </div>
     </div>
-{% endblock %} 
+
+    <!-- Candidates Grid -->
+    <div class="candidates-grid">
+        {% for candidate in candidates %}
+            <div class="candidate-card">
+                <div class="card-content" 
+                     data-pdf-url="{{ url_for('candidates.view_resume', filename=candidate.resume_path) }}"
+                     data-name="{{ candidate.name }}">
+                    <div class="card-header">
+                        <h3 class="card-title">{{ candidate.name }}</h3>
+                    </div>
+                    <div class="card-details">
+                        <p class="card-text">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>{{ candidate.location }}</span>
+                        </p>
+                        <p class="card-text">
+                            <i class="fas fa-code"></i>
+                            <span>{{ candidate.core_skills }}</span>
+                        </p>
+                        <p class="card-text">
+                            <i class="fas fa-clock"></i>
+                            <span>{{ candidate.experience_years }} years experience</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- PDF Modal -->
+    <div id="pdfModal" class="pdf-modal">
+        <div class="pdf-modal-content">
+            <span class="pdf-close">&times;</span>
+            <h2 id="pdfModalTitle"></h2>
+            <iframe id="pdfFrame"></iframe>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='js/candidates.js') }}"></script>
+{% endblock %}
