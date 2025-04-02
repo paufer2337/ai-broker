@@ -30,19 +30,23 @@
         </div>
     </nav>
 
-    {% block hero %}
-    <header class="hero">
+    {% if request.endpoint == 'index' %}
+    <!-- Only show hero on main index page -->
+    <div class="hero-section">
         <div class="container">
             <div class="hero-content">
-                <h1>MATCH<br>SECURE<br>DELIVER</h1>
-                <p class="subtitle">Internal talent matching platform for Secure by Q, powered by intelligent matching algorithms.</p>
-                <div class="hero-footer">
-                    <img src="{{ url_for('static', filename='images/small_logo.png') }}" alt="Secure by Q" class="logo-image">
+                <div class="text-container">
+                    <h1>
+                        <span class="hero-line">MATCH</span>
+                        <span class="hero-line">SECURE</span>
+                        <span class="hero-line">DELIVER</span>
+                    </h1>
+                    <p class="hero-description">Internal talent matching platform for Secure by Q, powered by intelligent matching algorithms.</p>
                 </div>
             </div>
         </div>
-    </header>
-    {% endblock %}
+    </div>
+    {% endif %}
 
     <main class="main-content">
         <div class="container">
@@ -62,5 +66,7 @@
             </div>
         </div>
     </footer>
+
+    {% block scripts %}{% endblock %}
 </body>
 </html>
