@@ -10,4 +10,7 @@ class Candidate(db.Model):
     core_skills = db.Column(db.String(200))  # Main skills to display in the preview
     experience_years = db.Column(db.Integer)
     resume_path = db.Column(db.String(200))  # Path to stored PDF
-    added_date = db.Column(db.DateTime, default=datetime.utcnow) 
+    added_date = db.Column(db.DateTime, default=datetime.utcnow)
+    resume_text = db.Column(db.Text)  # Extracted text from resume
+    extracted_tags = db.Column(db.Text)  # Comma-separated list of extracted tags
+    last_processed = db.Column(db.DateTime)  # When the resume was last processed

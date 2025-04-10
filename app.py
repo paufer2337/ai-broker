@@ -2,6 +2,7 @@ from extensions import db
 from flask import Flask, render_template
 from flask_bootstrap import Bootstrap
 from flask_wtf.csrf import CSRFProtect
+from blueprints.matching import matching_bp
 import os
 
 app = Flask(__name__)
@@ -26,6 +27,7 @@ from blueprints.matching import matching_bp
 app.register_blueprint(brokers_bp, url_prefix='/brokers')
 app.register_blueprint(candidates_bp, url_prefix='/candidates')
 app.register_blueprint(matching_bp, url_prefix='/matches')
+app.register_blueprint(matching_bp, url_prefix='/matching')
 
 @app.route('/')
 def index():

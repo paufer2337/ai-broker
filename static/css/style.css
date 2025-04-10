@@ -82,6 +82,12 @@ body:not(:has(.hero-section)) .background-q {
     font-weight: 400;
     letter-spacing: 2px;
     color: var(--text-light);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.logo-text:hover {
+    color: var(--accent);
 }
 
 .logo-image {

@@ -18,10 +18,10 @@
         <div class="container">
             <div class="nav-content">
                 <div class="logo-container">
-                    <span class="logo-text">SECURE MATCH</span>
+                    <a href="{{ url_for('index') }}" class="logo-text">SECURE MATCH</a>
                 </div>
                 <ul class="nav-links">
-                    <li><a href="{{ url_for('index') }}"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a href="{{ url_for('index') }}"><i class="fas fa-home"></i> HOME</a></li>
                     <li><a href="{{ url_for('brokers.broker_index') }}"><i class="fas fa-building"></i> Brokers</a></li>
                     <li><a href="{{ url_for('candidates.candidate_index') }}"><i class="fas fa-users"></i> Candidates</a></li>
                     <li><a href="{{ url_for('matching.matching_dashboard') }}"><i class="fas fa-handshake"></i> Matches</a></li>
@@ -61,7 +61,7 @@
                     <img src="{{ url_for('static', filename='images/small_logo.png') }}" alt="Secure by Q" class="footer-logo-image">
                 </div>
                 <div class="copyright">
-                    © 2025 Secure by Q. All rights reserved.
+                    © 2024 Secure by Q. All rights reserved.
                 </div>
             </div>
         </div>
