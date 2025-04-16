@@ -4,8 +4,11 @@ from werkzeug.utils import secure_filename
 from forms.candidates import CandidateForm
 from model.candidate import Candidate
 from extensions import db
+from src.pdf_processor import PDFProcessor
+from datetime import datetime
 
 candidates_bp = Blueprint('candidates', __name__)
+pdf_processor = PDFProcessor()
 
 @candidates_bp.route('/', methods=['GET', 'POST'])
 def candidate_index():
@@ -35,6 +38,15 @@ def candidate_index():
             pdf_file.save(file_path)
             print("File saved successfully")  # Debug print
             
+            # Process the PDF
+            try:
+                processed_text, sections, tags = pdf_processor.process_resume(file_path)
+                print("PDF processed successfully")  # Debug print
+            except Exception as e:
+                print(f"Error processing PDF: {str(e)}")  # Debug print
+                processed_text = None
+                tags = []
+            
             # Create candidate
             candidate = Candidate(
                 name=form.name.data,
@@ -42,13 +54,20 @@ def candidate_index():
                 location=form.location.data,
                 core_skills=form.core_skills.data,
                 experience_years=form.experience_years.data,
-                resume_path=filename  # Store just the filename
+                resume_path=filename,  # Store just the filename
+                resume_text=processed_text,  # Store processed text
+                extracted_tags=','.join(tags) if tags else None,  # Store extracted tags
+                last_processed=datetime.utcnow() if processed_text else None  # Set processing timestamp
             )
             db.session.add(candidate)
             db.session.commit()
             print("Candidate saved to database")  # Debug print
             
-            flash('Candidate added successfully!', 'success')
+            if processed_text:
+                flash('Candidate added successfully and resume processed!', 'success')
+            else:
+                flash('Candidate added successfully but resume processing failed. You can try processing it later.', 'warning')
+                
         except Exception as e:
             print(f"Error occurred: {str(e)}")  # Debug print
             flash(f'Error saving candidate: {str(e)}', 'error')
@@ -61,11 +80,15 @@ def candidate_index():
     print(f"Found {len(candidates)} candidates")  # Debug print
     return render_template('candidates/index.html', form=form, candidates=candidates)
 
-@candidates_bp.route('/resume/<filename>')
-def view_resume(filename):
+@candidates_bp.route('/resume/<int:candidate_id>')
+def view_resume(candidate_id):
     try:
-        print(f"Attempting to serve PDF: {filename}")  # Debug print
-        return send_from_directory(current_app.config['UPLOAD_FOLDER'], filename)
+        candidate = Candidate.query.get_or_404(candidate_id)
+        if not candidate.resume_path:
+            return "No resume uploaded for this candidate", 404
+            
+        print(f"Attempting to serve PDF: {candidate.resume_path}")  # Debug print
+        return send_from_directory(current_app.config['UPLOAD_FOLDER'], candidate.resume_path)
     except Exception as e:
         print(f"Error serving PDF: {str(e)}")  # Debug print
         return "PDF not found", 404

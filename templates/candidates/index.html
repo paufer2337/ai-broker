@@ -4,13 +4,11 @@
 {% block hero %}{% endblock %}
 
 {% block content %}
-<div class="section candidates-section">
-    <h2 class="section-title">Candidates</h2>
-    
-    <!-- Only one form at the top -->
+<div class="dashboard-container">
+    <!-- Form Section -->
     <div class="form-section">
         <div class="form-container">
-            <h3 class="form-title">Add New Candidate</h3>
+            <h3 class="form-title">Add new candidate</h3>
             <form method="POST" enctype="multipart/form-data">
                 {{ wtf.quick_form(form, button_map={'submit': 'primary'}) }}
             </form>
@@ -18,46 +16,119 @@
     </div>
 
     <!-- Candidates Grid -->
-    <div class="candidates-grid">
-        {% for candidate in candidates %}
+    <div class="candidates-section">
+        <h2>Candidates</h2>
+        <div class="candidates-grid">
+            {% for candidate in candidates %}
             <div class="candidate-card">
-                <div class="card-content" 
-                     data-pdf-url="{{ url_for('candidates.view_resume', filename=candidate.resume_path) }}"
-                     data-name="{{ candidate.name }}">
-                    <div class="card-header">
-                        <h3 class="card-title">{{ candidate.name }}</h3>
+                <div class="card-header">
+                    <h3>{{ candidate.name }}</h3>
+                    <span class="experience-tag">{{ candidate.experience_years }} years of experience</span>
+                </div>
+                <div class="card-body">
+                    <div class="location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        {{ candidate.location }}
                     </div>
-                    <div class="card-details">
-                        <p class="card-text">
-                            <i class="fas fa-map-marker-alt"></i>
-                            <span>{{ candidate.location }}</span>
-                        </p>
-                        <p class="card-text">
-                            <i class="fas fa-code"></i>
-                            <span>{{ candidate.core_skills }}</span>
-                        </p>
-                        <p class="card-text">
-                            <i class="fas fa-clock"></i>
-                            <span>{{ candidate.experience_years }} years experience</span>
-                        </p>
+                    <div class="skills">
+                        {% for skill in candidate.core_skills.split(',')[:3] %}
+                        <span class="skill-tag">{{ skill.strip() }}</span>
+                        {% endfor %}
+                        {% if candidate.core_skills.split(',')|length > 3 %}
+                        <span class="skill-tag">+{{ candidate.core_skills.split(',')|length - 3 }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="resume-info">
+                        <i class="fas fa-file-alt"></i>
+                        Resume last updated: {{ candidate.last_processed.strftime('%Y-%m-%d') if candidate.last_processed else 'Not processed' }}
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="action-buttons">
+                        <a href="{{ url_for('candidates.view_resume', candidate_id=candidate.id) }}" 
+                           class="view-button"
+                           data-pdf-url="{{ url_for('candidates.view_resume', candidate_id=candidate.id) }}"
+                           data-name="{{ candidate.name }}">
+                            <i class="fas fa-eye"></i>
+                            View Resume
+                        </a>
+                        <a href="{{ url_for('candidates.edit_candidate', id=candidate.id) }}" class="edit-button">
+                            <i class="fas fa-edit"></i>
+                            Edit
+                        </a>
+                        <form action="{{ url_for('candidates.delete_candidate', candidate_id=candidate.id) }}" method="POST" style="display: inline;">
+                            <button type="submit" class="delete-button" onclick="return confirm('Are you sure you want to delete this candidate?')">
+                                <i class="fas fa-trash-alt"></i>
+                                Delete
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
-        {% endfor %}
-    </div>
-
-    <!-- PDF Modal -->
-    <div id="pdfModal" class="pdf-modal">
-        <div class="pdf-modal-content">
-            <span class="pdf-close">&times;</span>
-            <h2 id="pdfModalTitle"></h2>
-            <iframe id="pdfFrame"></iframe>
+            {% endfor %}
         </div>
+    </div>
+</div>
+
+<!-- PDF Modal -->
+<div class="pdf-modal" id="pdfModal">
+    <div class="pdf-modal-content">
+        <span class="pdf-close">&times;</span>
+        <h3 id="pdfModalTitle"></h3>
+        <iframe id="pdfFrame" width="100%" height="600px"></iframe>
     </div>
 </div>
 {% endblock %}
 
 {% block scripts %}
-    {{ super() }}
-    <script src="{{ url_for('static', filename='js/candidates.js') }}"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('pdfModal');
+    const modalTitle = document.getElementById('pdfModalTitle');
+    const pdfFrame = document.getElementById('pdfFrame');
+    const closeBtn = document.querySelector('.pdf-close');
+
+    // Add click event to view buttons
+    document.querySelectorAll('.view-button').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const pdfUrl = this.getAttribute('data-pdf-url');
+            const name = this.getAttribute('data-name');
+            
+            // Set modal content
+            modalTitle.textContent = `${name}'s Resume`;
+            pdfFrame.src = pdfUrl;
+            
+            // Show modal
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        });
+    });
+
+    // Close modal when clicking X
+    closeBtn.addEventListener('click', function() {
+        closeModal();
+    });
+
+    // Close modal when clicking outside
+    window.addEventListener('click', function(event) {
+        if (event.target === modal) {
+            closeModal();
+        }
+    });
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape' && modal.style.display === 'block') {
+            closeModal();
+        }
+    });
+
+    function closeModal() {
+        modal.style.display = 'none';
+        pdfFrame.src = '';
+        document.body.style.overflow = 'auto';
+    }
+});
+</script>
 {% endblock %}

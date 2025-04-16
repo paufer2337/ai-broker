@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, current_app
+from flask import Blueprint, request, jsonify, current_app, render_template
 from werkzeug.utils import secure_filename
 import os
 from model.candidate import Candidate
@@ -134,3 +134,20 @@ def process_all_resumes():
         'processed_count': len(candidates),
         'results': results
     })
+
+@matching_bp.route('/mission/<int:mission_id>')
+def mission_detail(mission_id):
+    """Show detailed information about a specific mission"""
+    mission = Mission.query.get_or_404(mission_id)
+    return render_template('matching/mission_detail.html', mission=mission)
+
+@matching_bp.route('/dashboard')
+def matching_dashboard():
+    """Show the matching dashboard with recent missions and matches"""
+    missions = Mission.query.order_by(Mission.posted_date.desc()).limit(10).all()
+    candidates = Candidate.query.all()
+    brokers = Broker.query.all()
+    return render_template('matching/dashboard.html', 
+                         missions=missions,
+                         candidates=candidates,
+                         brokers=brokers)

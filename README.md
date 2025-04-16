@@ -12,7 +12,7 @@ This project implements an AI agent that matches broker missions with candidate 
 
 ## Project Structure
 ```
-resume_matching_project/
+ai-broker/
 ├── src/
 │   ├── __init__.py
 │   ├── pdf_processor.py      # PDF text extraction and processing
@@ -26,6 +26,7 @@ resume_matching_project/
 ```
 
 ## Installation
+- See requirements.txt
 
 ### Prerequisites
 - Python 3.6+
@@ -197,63 +198,54 @@ This project is provided as-is for your use. You are free to modify and adapt it
 For any questions or issues, please contact your project maintainer.
 
 
-## Tags English:
-- Cybersecurity Consulting
-- Risk Management
-- GDPR Compliance
-- Data Protection
-- Privacy & Integrity
-- Secure Digital Transformation
-- Sustainable Digitalization
-- Compliance & Audits
-- Product Security
-- Secure Product Development
-- Information Security
-- Risk Mitigation Strategies
-- Digital Risk Management
-- Proactive Defense Strategies
-- National Security Consulting
-- Internal Investigations
-- External Research
-- Security Expertise
-- Digital Resilience
-- Regulatory Compliance
-- Security Audits
-- Privacy Laws
-- Technology Governance
-- Ethical Practices
-- Security Training
-- Corporate Security Solutions
-- Risk Assessment
-- Digital Innovation
-- Secure Infrastructure
 
-## Tags Swedish:
-- Cybersäkerhetskonsulttjänster
-- Riskhantering
-- GDPR-efterlevnad
-- Dataskydd
-- Integritet & Sekretess
-- Säker Digital Transformation
-- Hållbar Digitalisering
-- Efterlevnad & Revisioner
-- Produktäkerhet
-- Säker Produktutveckling
-- Informationssäkerhet
-- Riskreduceringsstrategier
-- Digital Riskhantering
-- Proaktiva Försvarsstategier
-- Nationell Säkerhetsrådgivning
-- Interna Undersökningar
-- Extern Forskning
-- Säkerhetsexpertis
-- Digital Resiliens
-- Regulatorisk Efterlevnad
-- Säkerhetsrevisioner
-- Sekretesslagar
-- Teknologiskt Styre
-- Etiska Praktiker
-- Säkerhetsträning
-- Företagssäkerhetslösningar
-- Riskbedömning
-- Säker Infrastruktur
+
+## Definiera taggar på både engelska och svenska
+cybersecurity_tags = {
+    "Cybersecurity Consulting": "Cybersäkerhetskonsulttjänster",
+    "Risk Management": "Riskhantering",
+    "GDPR Compliance": "GDPR-efterlevnad",
+    "Data Protection": "Dataskydd",
+    "Privacy & Integrity": "Integritet & Sekretess",
+    "Secure Digital Transformation": "Säker Digital Transformation",
+    "Sustainable Digitalization": "Hållbar Digitalisering",
+    "Compliance & Audits": "Efterlevnad & Revisioner",
+    "Product Security": "Produktäkerhet",
+    "Secure Product Development": "Säker Produktutveckling",
+    "Information Security": "Informationssäkerhet",
+    "Risk Mitigation Strategies": "Riskreduceringsstrategier",
+    "Digital Risk Management": "Digital Riskhantering",
+    "Proactive Defense Strategies": "Proaktiva Försvarsstategier",
+    "National Security Consulting": "Nationell Säkerhetsrådgivning",
+    "Internal Investigations": "Interna Undersökningar",
+    "External Research": "Extern Forskning",
+    "Security Expertise": "Säkerhetsexpertis",
+    "Digital Resilience": "Digital Resiliens",
+    "Regulatory Compliance": "Regulatorisk Efterlevnad",
+    "Security Audits": "Säkerhetsrevisioner",
+    "Privacy Laws": "Sekretesslagar",
+    "Technology Governance": "Teknologiskt Styre",
+    "Ethical Practices": "Etiska Praktiker",
+    "Security Training": "Säkerhetsträning",
+    "Corporate Security Solutions": "Företagssäkerhetslösningar",
+    "Risk Assessment": "Riskbedömning",
+    "Digital Innovation": "Digital Innovation",
+    "Secure Infrastructure": "Säker Infrastruktur"
+}
+
+# Kombinera alla taggar (både engelska och svenska)
+all_tags = list(cybersecurity_tags.keys()) + list(cybersecurity_tags.values())
+
+# Uppdatera alla uppdrag med både engelska och svenska taggar
+for mission in Mission.query.all():
+    mission.required_skills_tags = ", ".join(all_tags)
+    mission.required_skills = ", ".join(all_tags)  # Uppdatera även required_skills för konsistens
+
+# Spara ändringar
+db.session.commit()
+print("Uppdaterade alla uppdrag med både engelska och svenska cybersäkerhetstaggarna")
+
+# Check a mission's tags
+mission = Mission.query.first()
+print("Mission tags:", mission.required_skills_tags)
+print("Mission skills:", mission.required_skills)
