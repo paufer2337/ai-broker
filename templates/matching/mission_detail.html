@@ -1,0 +1,160 @@
+{% extends "index.html" %}
+{% block hero %}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="mb-0">{{ mission.title }}</h2>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Mission Details</h5>
+                    <p class="card-text">{{ mission.description }}</p>
+                    
+                    <div class="mission-details mt-4">
+                        <h6>Required Skills</h6>
+                        <div class="skills-tags">
+                            {% for skill in mission.required_skills.split(',') %}
+                            <span class="badge bg-primary me-2">{{ skill.strip() }}</span>
+                            {% endfor %}
+                        </div>
+
+                        <h6 class="mt-3">Location</h6>
+                        <p>{{ mission.location }}</p>
+
+                        <h6 class="mt-3">Duration</h6>
+                        <p>{{ mission.duration }}</p>
+
+                        <h6 class="mt-3">Start Date</h6>
+                        <p>{{ mission.start_date }}</p>
+
+                        {% if mission.budget %}
+                        <h6 class="mt-3">Budget</h6>
+                        <p>{{ mission.budget }}</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="action-buttons mt-4">
+                        <button class="btn btn-primary" id="match-candidates-btn" data-mission-id="{{ mission.id }}">
+                            <i class="fas fa-user-plus me-2"></i>Match with Candidates
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Broker Information</h5>
+                </div>
+                <div class="card-body">
+                    <h6>{{ mission.broker.name }}</h6>
+                    <p>{{ mission.broker.description }}</p>
+                    {% if mission.broker.webpage %}
+                    <a href="{{ mission.broker.webpage }}" target="_blank" class="btn btn-outline-primary btn-sm">
+                        <i class="fas fa-external-link-alt me-2"></i>Visit Website
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Match Results Modal -->
+<div class="modal fade" id="matchResultsModal" tabindex="-1" aria-labelledby="matchResultsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="matchResultsModalLabel">Matching Results</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="match-results-container">
+                    <!-- Results will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const matchButton = document.getElementById('match-candidates-btn');
+    const resultsContainer = document.getElementById('match-results-container');
+    
+    matchButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        const missionId = this.getAttribute('data-mission-id');
+        
+        // Show loading state
+        resultsContainer.innerHTML = `
+            <div class="text-center">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-2">Finding the best matches...</p>
+            </div>
+        `;
+        
+        // Show the modal
+        const modal = new bootstrap.Modal(document.getElementById('matchResultsModal'));
+        modal.show();
+        
+        // Fetch matches
+        fetch(`/matching/match_mission/${missionId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    let html = `
+                        <h6>Top matches for: ${data.mission_title}</h6>
+                        <p class="text-muted">Tags: ${data.mission_tags.join(', ')}</p>
+                    `;
+                    
+                    if (data.matches.length === 0) {
+                        html += '<div class="alert alert-info">No matching candidates found.</div>';
+                    } else {
+                        html += '<div class="list-group">';
+                        data.matches.forEach(match => {
+                            const matchScore = Math.round(match.score * 100);
+                            html += `
+                                <a href="/candidates/${match.candidate_id}" class="list-group-item list-group-item-action">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1">${match.name}</h5>
+                                        <span class="badge bg-primary">${matchScore}% Match</span>
+                                    </div>
+                                    <p class="mb-1">${match.core_skills}</p>
+                                    <small class="text-muted">${match.location} • ${match.experience_years} years experience</small>
+                                </a>
+                            `;
+                        });
+                        html += '</div>';
+                    }
+                    
+                    resultsContainer.innerHTML = html;
+                } else {
+                    resultsContainer.innerHTML = `
+                        <div class="alert alert-danger">
+                            Error: ${data.message}
+                        </div>
+                    `;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                resultsContainer.innerHTML = `
+                    <div class="alert alert-danger">
+                        Error fetching matches. Please try again.
+                    </div>
+                `;
+            });
+    });
+});
+</script>
+{% endblock %} 

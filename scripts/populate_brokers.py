@@ -7,6 +7,27 @@ from model.broker import Broker
 
 brokers_data = [
     {
+        "name": "Academic Work",
+        "webpage": "https://www.academicwork.se/",
+        "description": "Specialist in staffing and recruitment of young professionals.",
+        "location": "Sweden",
+        "focus_areas": "IT, Engineering, Business"
+    },
+    {
+        "name": "Ework Group",
+        "webpage": "https://www.eworkgroup.com/se/",
+        "description": "Consultant supplier in IT, telecom, technology, and business development.",
+        "location": "Sweden",
+        "focus_areas": "IT, Telecom, Engineering"
+    },
+    {
+        "name": "DFind IT",
+        "webpage": "https://www.dfind.se/it/",
+        "description": "Recruitment and consulting in IT and tech.",
+        "location": "Sweden",
+        "focus_areas": "IT, Tech, Development"
+    },
+    {
         "name": "Workforce Logic",
         "webpage": "https://eu.workforcelogiq.com/",
         "description": "Global workforce management solutions",

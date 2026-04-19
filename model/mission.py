@@ -12,6 +12,7 @@ class Mission(db.Model):
     broker_id = db.Column(db.Integer, db.ForeignKey('brokers.id'))
     broker = db.relationship('Broker', backref='missions', lazy=True)
     start_date = db.Column(db.DateTime)
-    duration = db.Column(db.String(50))  # e.g., "6 months", "1 year"
-    rate = db.Column(db.String(50))  # e.g., "800-1000 SEK/hour"
-    status = db.Column(db.String(50), default='active') 
+    duration = db.Column(db.String(50))  
+    rate = db.Column(db.String(50)) 
+    status = db.Column(db.String(50), default='active')
+    required_skills_tags = db.Column(db.Text)  
